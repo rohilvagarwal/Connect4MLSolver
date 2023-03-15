@@ -62,16 +62,16 @@ def winning_move(board, piece):
 				return True
 
 
-def animate_drop(row, col, piece):
+def animate_drop(row, col, player):
 	x_pos = int(col * SQUARESIZE + SQUARESIZE / 2)
 	y_init_pos = int(SQUARESIZE / 2)
 	y_final_pos = height - int(row * SQUARESIZE + SQUARESIZE / 2)
 	curr_velocity = initial_velocity
 
-	if piece == 1:
-		color = RED
+	if player == 1:
+		color = player1Color
 	else:
-		color = YELLOW
+		color = player2Color
 
 	y_curr_pos = y_init_pos
 	while y_curr_pos < y_final_pos:
@@ -95,10 +95,10 @@ def draw_board(board):
 	for c in range(COLUMN_COUNT):
 		for r in range(ROW_COUNT):
 			if board[r][c] == 1:
-				pygame.draw.circle(screen, RED, (
+				pygame.draw.circle(screen, player1Color, (
 					int(c * SQUARESIZE + SQUARESIZE / 2), height - int(r * SQUARESIZE + SQUARESIZE / 2)), RADIUS)
 			elif board[r][c] == 2:
-				pygame.draw.circle(screen, YELLOW, (
+				pygame.draw.circle(screen, player2Color, (
 					int(c * SQUARESIZE + SQUARESIZE / 2), height - int(r * SQUARESIZE + SQUARESIZE / 2)), RADIUS)
 	pygame.display.update()
 
@@ -111,9 +111,10 @@ turn = 0
 pygame.init()
 
 SQUARESIZE = 100
-
 width = COLUMN_COUNT * SQUARESIZE
 height = (ROW_COUNT + 1) * SQUARESIZE
+RADIUS = int(SQUARESIZE / 2 - 5)
+
 clock = pygame.time.Clock()
 initial_velocity = 0
 velocity = 500  # pixels per second
@@ -123,7 +124,8 @@ FPS = 60
 
 size = (width, height)
 
-RADIUS = int(SQUARESIZE / 2 - 5)
+player1Color = RED
+player2Color = YELLOW
 
 screen = pygame.display.set_mode(size)
 draw_board(board)
@@ -139,53 +141,41 @@ while not game_over:
 		if event.type == pygame.MOUSEMOTION:
 			pygame.draw.rect(screen, BLACK, (0, 0, width, SQUARESIZE))
 			posx = event.pos[0]
-			if turn == 0:
-				pygame.draw.circle(screen, RED, (posx, int(SQUARESIZE / 2)), RADIUS)
+			if turn % 2 == 1:
+				pygame.draw.circle(screen, player1Color, (posx, int(SQUARESIZE / 2)), RADIUS)
 			else:
-				pygame.draw.circle(screen, YELLOW, (posx, int(SQUARESIZE / 2)), RADIUS)
+				pygame.draw.circle(screen, player2Color, (posx, int(SQUARESIZE / 2)), RADIUS)
 		pygame.display.update()
 
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			turn += 1
+			currPlayer = turn % 2
+			currColor = player1Color
+
+			if currPlayer == 0:
+				currPlayer += 2
+				currColor = player2Color
+
 			pygame.draw.rect(screen, BLACK, (0, 0, width, SQUARESIZE))
+			posx = event.pos[0]
+			col = int(math.floor(posx / SQUARESIZE))
 
-			# Ask for Player 1 Input
-			if turn % 2 == 1:
-				posx = event.pos[0]
-				col = int(math.floor(posx / SQUARESIZE))
+			if is_valid_location(board, col):
+				row = get_next_open_row(board, col)
 
-				if is_valid_location(board, col):
-					row = get_next_open_row(board, col)
-					animate_drop(row, col, 1)
-					drop_piece(board, row, col, 1)
+				animate_drop(row, col, currPlayer)
+				drop_piece(board, row, col, currPlayer)
 
-					if winning_move(board, 1):
-						label = myfont.render("Player 1 wins!!", 1, RED)
-						screen.blit(label, (40, 10))
-						game_over = True
+				if winning_move(board, currPlayer):
+					label = myfont.render("Player " + str(currPlayer) + " wins!", 1, currColor)
+					screen.blit(label, (40, 10))
+					game_over = True
 
-
-			# # Ask for Player 2 Input
-			else:
-				posx = event.pos[0]
-				col = int(math.floor(posx / SQUARESIZE))
-
-				if is_valid_location(board, col):
-					row = get_next_open_row(board, col)
-					animate_drop(row, col, 2)
-					drop_piece(board, row, col, 2)
-
-					if winning_move(board, 2):
-						label = myfont.render("Player 2 wins!!", 1, YELLOW)
-						screen.blit(label, (40, 10))
-						game_over = True
+				turn += 1
 
 			print_board(board)
 			print()
 
 			draw_board(board)
-
-			turn = turn % 2
 
 			if game_over:
 				pygame.time.wait(3000)
