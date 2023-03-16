@@ -70,13 +70,13 @@ def winning_move(board, player):
 			if board[r][c] == player and board[r + 1][c] == player and board[r + 2][c] == player and board[r + 3][c] == player:
 				return True
 
-	# Check positively sloped diaganols
+	# Check positively sloped diagonals
 	for c in range(COLUMN_COUNT - 3):
 		for r in range(ROW_COUNT - 3):
 			if board[r][c] == player and board[r + 1][c + 1] == player and board[r + 2][c + 2] == player and board[r + 3][c + 3] == player:
 				return True
 
-	# Check negatively sloped diaganols
+	# Check negatively sloped diagonals
 	for c in range(COLUMN_COUNT - 3):
 		for r in range(3, ROW_COUNT):
 			if board[r][c] == player and board[r - 1][c + 1] == player and board[r - 2][c + 2] == player and board[r - 3][c + 3] == player:
@@ -178,7 +178,7 @@ while not game_over:
 			if is_valid_location(board, col):
 				row = get_next_open_row(board, col)
 
-				animate_drop(row, col, currPlayer)
+				#animate_drop(row, col, currPlayer)
 				drop_piece(board, row, col, currPlayer)
 
 				if winning_move(board, currPlayer):
