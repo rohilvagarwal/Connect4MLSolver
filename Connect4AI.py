@@ -17,6 +17,7 @@ NAVY_BLUE = pygame.Color("#27285C")
 GREEN = pygame.Color("#77DD77")
 DARK_PURPLE = pygame.Color("#301934")
 GREY = pygame.Color("#4c4c4c")
+TRANSPARENT = (0, 0, 0, 0)
 
 ROW_COUNT = 6
 COLUMN_COUNT = 7
@@ -248,12 +249,29 @@ def animate_drop(row, col, player):
 		label = turnFont.render("Turn: " + str(turn), True, turnColor)
 		screen.blit(label, (10, 10))
 		draw_chip(x_pos, y_curr_pos, player)
+		draw_board_foreground()
 		pygame.display.update()
 		curr_velocity += gravity
 		y_curr_pos += int(curr_velocity / FPS)
 		clock.tick(FPS)
 
 	draw_board(board)
+	pygame.display.update()
+
+
+def draw_board_foreground():
+	pygame.draw.rect(board_layer, gameColor, (0, 0, WIDTH - 2 * SQUARE_SIZE, HEIGHT - SQUARE_SIZE))  #Board
+	for c in range(COLUMN_COUNT):
+		for r in range(ROW_COUNT):
+			pygame.draw.circle(board_layer, TRANSPARENT,
+							   (int(c * SQUARE_SIZE + SQUARE_SIZE / 2), int(r * SQUARE_SIZE + SQUARE_SIZE / 2)), RADIUS)
+
+	board_layer.convert_alpha()
+
+	pygame.draw.rect(board_layer, outlineColor, (0, 0, WIDTH - 2 * SQUARE_SIZE, OUTLINE_WIDTH))  #Horizontal Outline
+	pygame.draw.rect(board_layer, outlineColor, (WIDTH - 2 * SQUARE_SIZE - OUTLINE_WIDTH, 0, OUTLINE_WIDTH, HEIGHT - SQUARE_SIZE))  #Vertical Outline
+
+	screen.blit(board_layer, (0, SQUARE_SIZE))
 
 
 def draw_top():
@@ -270,15 +288,16 @@ def draw_board(board, turn=None):
 		draw_top()
 
 	pygame.draw.rect(screen, menuColor, (WIDTH - 2 * SQUARE_SIZE, 0, SQUARE_SIZE * 2, HEIGHT))  #Menu
-
-	pygame.draw.rect(screen, gameColor, (0, SQUARE_SIZE, WIDTH - 2 * SQUARE_SIZE, HEIGHT - SQUARE_SIZE))  #Board
-	pygame.draw.rect(screen, outlineColor, (0, SQUARE_SIZE, WIDTH - 2 * SQUARE_SIZE, OUTLINE_WIDTH))  #Horizontal Outline
-	pygame.draw.rect(screen, outlineColor, (WIDTH - 2 * SQUARE_SIZE - OUTLINE_WIDTH, 0, OUTLINE_WIDTH, HEIGHT))  #Vertical Outline
+	pygame.draw.rect(screen, backgroundColor, (0, SQUARE_SIZE, WIDTH - 2 * SQUARE_SIZE, HEIGHT - SQUARE_SIZE))  #Behind Board
+	pygame.draw.rect(board_layer, gameColor, (0, 0, WIDTH - 2 * SQUARE_SIZE, HEIGHT - SQUARE_SIZE))  #Board
 
 	for c in range(COLUMN_COUNT):
 		for r in range(ROW_COUNT):
-			pygame.draw.circle(screen, backgroundColor,
-							   (int(c * SQUARE_SIZE + SQUARE_SIZE / 2), int(r * SQUARE_SIZE + SQUARE_SIZE + SQUARE_SIZE / 2)), RADIUS)
+			pygame.draw.circle(board_layer, TRANSPARENT,
+							   (int(c * SQUARE_SIZE + SQUARE_SIZE / 2), int(r * SQUARE_SIZE + SQUARE_SIZE / 2)), RADIUS)
+
+	board_layer.convert_alpha()
+	screen.blit(board_layer, (0, SQUARE_SIZE))
 
 	for c in range(COLUMN_COUNT):
 		for r in range(ROW_COUNT):
@@ -287,13 +306,17 @@ def draw_board(board, turn=None):
 			elif board[r][c] == HUMAN:
 				draw_chip(int(c * SQUARE_SIZE + SQUARE_SIZE / 2), HEIGHT - int(r * SQUARE_SIZE + SQUARE_SIZE / 2), HUMAN)
 
-	#pygame.draw.rect(screen, outlineColor, (0, SQUARE_SIZE, WIDTH - 2 * SQUARE_SIZE, OUTLINE_WIDTH))
+	pygame.draw.rect(screen, outlineColor, (0, SQUARE_SIZE, WIDTH - 2 * SQUARE_SIZE, OUTLINE_WIDTH))  #Horizontal Outline
+	pygame.draw.rect(screen, outlineColor, (WIDTH - 2 * SQUARE_SIZE - OUTLINE_WIDTH, 0, OUTLINE_WIDTH, HEIGHT))  #Vertical Outline
 	screen.blit(d4resized, (WIDTH - LOGO_SIZE, HEIGHT - LOGO_SIZE))
-	pygame.display.update()
+
+
+#pygame.display.update()
 
 
 pygame.init()
 screen = pygame.display.set_mode(SIZE)
+board_layer = pygame.Surface((WIDTH - 2 * SQUARE_SIZE, HEIGHT - SQUARE_SIZE)).convert_alpha()
 
 d4 = pygame.image.load("d4.png").convert_alpha()
 d4resized = pygame.transform.scale(d4, (LOGO_SIZE, LOGO_SIZE)).convert_alpha()
@@ -301,6 +324,7 @@ d4resized = pygame.transform.scale(d4, (LOGO_SIZE, LOGO_SIZE)).convert_alpha()
 board = create_board()
 print_board(board)
 draw_board(board)
+pygame.display.update()
 
 game_over = False
 turn = 1
@@ -355,6 +379,7 @@ while not game_over:
 					print()
 
 					draw_board(board, turn)
+					pygame.display.update()
 
 	if currPlayer == AI and not game_over:
 		col = minimax(board, 5, -math.inf, math.inf, True)[0]
@@ -369,6 +394,7 @@ while not game_over:
 		print_board(board)
 		turn += 1
 		draw_board(board, turn)
+		pygame.display.update()
 
 		if game_over:
 			playerName = None
