@@ -7,29 +7,36 @@ import math
 AI = 1
 HUMAN = 2
 
-GREY = pygame.Color("#242526")
+DARK_GREY = pygame.Color("#242526")
 BLUE = pygame.Color("#1357BE")
 RED = pygame.Color("#FF6961")
 YELLOW = pygame.Color("#FDFD96")
 WHITE = pygame.Color("#FFFFFF")
 LIGHT_GREY = pygame.Color("#D3D3D3")
 NAVY_BLUE = pygame.Color("#27285C")
+GREEN = pygame.Color("#77DD77")
+DARK_PURPLE = pygame.Color("#301934")
+GREY = pygame.Color("#4c4c4c")
 
 ROW_COUNT = 6
 COLUMN_COUNT = 7
 
-backgroundColor = GREY
+backgroundColor = DARK_GREY
 gameColor = BLUE
 AIcolor = RED
 humanColor = YELLOW
 chipOutlineColor = LIGHT_GREY
 turnColor = WHITE
+menuColor = GREY
+outlineColor = WHITE
 
 SQUARE_SIZE = 100
-width = COLUMN_COUNT * SQUARE_SIZE
-height = (ROW_COUNT + 1) * SQUARE_SIZE
-size = (width, height)
+WIDTH = COLUMN_COUNT * SQUARE_SIZE + 2 * SQUARE_SIZE
+HEIGHT = (ROW_COUNT + 1) * SQUARE_SIZE
+SIZE = (WIDTH, HEIGHT)
 RADIUS = int(SQUARE_SIZE / 2 - 5)
+OUTLINE_WIDTH = 3
+LOGO_SIZE = 100
 
 clock = pygame.time.Clock()
 FPS = 60
@@ -48,7 +55,8 @@ def drop_piece(board, row, col, player):
 
 
 def is_valid_location(board, col):
-	return board[ROW_COUNT - 1][col] == 0
+	topRow = board[ROW_COUNT - 1][col]
+	return topRow == 0
 
 
 def get_next_open_row(board, col):
@@ -95,7 +103,7 @@ def evaluate_window(window, player):
 		opponent = AI
 
 	if window.count(player) == 4:
-		score += 1000
+		score += math.inf
 	elif window.count(player) == 3 and window.count(0) == 1:
 		score += 5
 	elif window.count(player) == 2 and window.count(0) == 2:
@@ -231,12 +239,12 @@ def draw_chip(x, y, player):
 def animate_drop(row, col, player):
 	x_pos = int(col * SQUARE_SIZE + SQUARE_SIZE / 2)
 	y_init_pos = int(SQUARE_SIZE / 2)
-	y_final_pos = height - int(row * SQUARE_SIZE + SQUARE_SIZE / 2)
+	y_final_pos = HEIGHT - int(row * SQUARE_SIZE + SQUARE_SIZE / 2)
 	curr_velocity = initial_velocity
 
 	y_curr_pos = y_init_pos
 	while y_curr_pos < y_final_pos:
-		draw_board(board)
+		draw_board(board, turn)
 		label = turnFont.render("Turn: " + str(turn), True, turnColor)
 		screen.blit(label, (10, 10))
 		draw_chip(x_pos, y_curr_pos, player)
@@ -248,33 +256,55 @@ def animate_drop(row, col, player):
 	draw_board(board)
 
 
-def draw_board(board):
-	pygame.draw.rect(screen, backgroundColor, (0, 0, width, SQUARE_SIZE))
+def draw_top():
+	pygame.draw.rect(screen, backgroundColor, (0, 0, WIDTH - 2 * SQUARE_SIZE, SQUARE_SIZE))
+	label = turnFont.render("Turn: " + str(turn), True, turnColor)
+	screen.blit(label, (10, 10))
+	pygame.draw.rect(screen, outlineColor, (WIDTH - 2 * SQUARE_SIZE - OUTLINE_WIDTH, 0, OUTLINE_WIDTH, SQUARE_SIZE))  #Vertical Outline
+
+
+def draw_board(board, turn=None):
+	if turn is None:
+		pygame.draw.rect(screen, backgroundColor, (0, 0, WIDTH - 2 * SQUARE_SIZE, SQUARE_SIZE))  #Top
+	else:
+		draw_top()
+
+	pygame.draw.rect(screen, menuColor, (WIDTH - 2 * SQUARE_SIZE, 0, SQUARE_SIZE * 2, HEIGHT))  #Menu
+
+	pygame.draw.rect(screen, gameColor, (0, SQUARE_SIZE, WIDTH - 2 * SQUARE_SIZE, HEIGHT - SQUARE_SIZE))  #Board
+	pygame.draw.rect(screen, outlineColor, (0, SQUARE_SIZE, WIDTH - 2 * SQUARE_SIZE, OUTLINE_WIDTH))  #Horizontal Outline
+	pygame.draw.rect(screen, outlineColor, (WIDTH - 2 * SQUARE_SIZE - OUTLINE_WIDTH, 0, OUTLINE_WIDTH, HEIGHT))  #Vertical Outline
 
 	for c in range(COLUMN_COUNT):
 		for r in range(ROW_COUNT):
-			pygame.draw.rect(screen, gameColor, (c * SQUARE_SIZE, r * SQUARE_SIZE + SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 			pygame.draw.circle(screen, backgroundColor,
 							   (int(c * SQUARE_SIZE + SQUARE_SIZE / 2), int(r * SQUARE_SIZE + SQUARE_SIZE + SQUARE_SIZE / 2)), RADIUS)
 
 	for c in range(COLUMN_COUNT):
 		for r in range(ROW_COUNT):
-			if board[r][c] == 1:
-				draw_chip(int(c * SQUARE_SIZE + SQUARE_SIZE / 2), height - int(r * SQUARE_SIZE + SQUARE_SIZE / 2), 1)
-			elif board[r][c] == 2:
-				draw_chip(int(c * SQUARE_SIZE + SQUARE_SIZE / 2), height - int(r * SQUARE_SIZE + SQUARE_SIZE / 2), 2)
+			if board[r][c] == AI:
+				draw_chip(int(c * SQUARE_SIZE + SQUARE_SIZE / 2), HEIGHT - int(r * SQUARE_SIZE + SQUARE_SIZE / 2), AI)
+			elif board[r][c] == HUMAN:
+				draw_chip(int(c * SQUARE_SIZE + SQUARE_SIZE / 2), HEIGHT - int(r * SQUARE_SIZE + SQUARE_SIZE / 2), HUMAN)
+
+	#pygame.draw.rect(screen, outlineColor, (0, SQUARE_SIZE, WIDTH - 2 * SQUARE_SIZE, OUTLINE_WIDTH))
+	screen.blit(d4resized, (WIDTH - LOGO_SIZE, HEIGHT - LOGO_SIZE))
 	pygame.display.update()
 
 
+pygame.init()
+screen = pygame.display.set_mode(SIZE)
+
+d4 = pygame.image.load("d4.png").convert_alpha()
+d4resized = pygame.transform.scale(d4, (LOGO_SIZE, LOGO_SIZE)).convert_alpha()
+
 board = create_board()
 print_board(board)
+draw_board(board)
+
 game_over = False
 turn = 1
 
-pygame.init()
-
-screen = pygame.display.set_mode(size)
-draw_board(board)
 pygame.display.update()
 
 winFont = pygame.font.SysFont("jost700", 75)
@@ -292,61 +322,63 @@ while not game_over:
 		if event.type == pygame.QUIT:
 			sys.exit()
 
-		pygame.draw.rect(screen, backgroundColor, (0, 0, width, SQUARE_SIZE))
-		label = turnFont.render("Turn: " + str(turn), True, turnColor)
-		screen.blit(label, (10, 10))
+		draw_top()
 
 		if currPlayer == HUMAN:
 			if event.type == pygame.MOUSEMOTION:
 				posx = event.pos[0]
-				circlePosX = int(math.floor(posx / SQUARE_SIZE)) * SQUARE_SIZE + SQUARE_SIZE / 2
-				draw_chip(circlePosX, int(SQUARE_SIZE / 2), HUMAN)
+
+				if posx < WIDTH - 2 * SQUARE_SIZE:
+					circlePosX = int(math.floor(posx / SQUARE_SIZE)) * SQUARE_SIZE + SQUARE_SIZE / 2
+					draw_chip(circlePosX, int(SQUARE_SIZE / 2), HUMAN)
 
 			pygame.display.update()
 
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				posx = event.pos[0]
-				col = int(math.floor(posx / SQUARE_SIZE))
 
-				if is_valid_location(board, col):
-					row = get_next_open_row(board, col)
+				if posx < WIDTH - 2 * SQUARE_SIZE:
+					col = int(math.floor(posx / SQUARE_SIZE))
 
-					animate_drop(row, col, HUMAN)
-					drop_piece(board, row, col, HUMAN)
+					if is_valid_location(board, col):
+						row = get_next_open_row(board, col)
 
-					if winning_move(board, HUMAN):
-						game_over = True
+						animate_drop(row, col, HUMAN)
+						drop_piece(board, row, col, HUMAN)
 
-					turn += 1
+						if winning_move(board, HUMAN):
+							game_over = True
 
-				print_board(board)
-				print()
+						turn += 1
 
-				draw_board(board)
+					print_board(board)
+					print()
+
+					draw_board(board, turn)
 
 	if currPlayer == AI and not game_over:
-
-		#col = random.randint(0, COLUMN_COUNT-1)
-		#col = pick_best_move(board, AI_PIECE)
 		col = minimax(board, 5, -math.inf, math.inf, True)[0]
+		#pygame.time.wait(500)
+		row = get_next_open_row(board, col)
+		animate_drop(row, col, AI)
+		drop_piece(board, row, col, AI)
 
-		if is_valid_location(board, col):
-			#pygame.time.wait(500)
-			row = get_next_open_row(board, col)
-			animate_drop(row, col, AI)
-			drop_piece(board, row, col, AI)
+		if winning_move(board, AI):
+			game_over = True
 
-			if winning_move(board, AI):
-				game_over = True
-
-			print_board(board)
-			draw_board(board)
-
-			turn += 1
+		print_board(board)
+		turn += 1
+		draw_board(board, turn)
 
 		if game_over:
-			label = winFont.render("Player " + str(currPlayer) + " wins!", True, currColor)
-			text_rect = label.get_rect(center=(width / 2, 50))
+			playerName = None
+
+			if currPlayer == 1:
+				playerName = "The AI"
+			else:
+				playerName = "You"
+			label = winFont.render(playerName + " won!", True, currColor)
+			text_rect = label.get_rect(center=((WIDTH - 2 * SQUARE_SIZE) / 2, 50))
 			screen.blit(label, text_rect)
 			pygame.display.update()
 
