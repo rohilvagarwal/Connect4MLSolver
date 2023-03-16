@@ -237,6 +237,8 @@ def animate_drop(row, col, player):
 	y_curr_pos = y_init_pos
 	while y_curr_pos < y_final_pos:
 		draw_board(board)
+		label = turnFont.render("Turn: " + str(turn), True, turnColor)
+		screen.blit(label, (10, 10))
 		draw_chip(x_pos, y_curr_pos, player)
 		pygame.display.update()
 		curr_velocity += gravity
