@@ -62,7 +62,8 @@ def is_valid_location(board, col):
 
 def get_next_open_row(board, col):
 	for r in range(ROW_COUNT):
-		if board[r][col] == 0:
+		position = board[r][col]
+		if np.any(position == 0):
 			return r
 
 
@@ -104,7 +105,7 @@ def evaluate_window(window, player):
 		opponent = AI
 
 	if window.count(player) == 4:
-		score += math.inf
+		score += 999999
 	elif window.count(player) == 3 and window.count(0) == 1:
 		score += 5
 	elif window.count(player) == 2 and window.count(0) == 2:
@@ -185,9 +186,9 @@ def minimax(board, depth, alpha, beta, maximizingPlayer):
 	if depth == 0 or is_terminal:
 		if is_terminal:
 			if winning_move(board, AI):
-				return [None, math.inf]
+				return [None, 999999]
 			elif winning_move(board, HUMAN):
-				return [None, -math.inf]
+				return [None, -999999]
 			else:  # Game is over, no more valid moves
 				return [None, 0]
 
@@ -383,6 +384,7 @@ while not game_over:
 
 	if currPlayer == AI and not game_over:
 		col = minimax(board, 5, -math.inf, math.inf, True)[0]
+		print(col)
 		#pygame.time.wait(500)
 		row = get_next_open_row(board, col)
 		animate_drop(row, col, AI)
