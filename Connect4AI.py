@@ -110,9 +110,8 @@ def evaluate_window(window, player):
 		score += 5
 	elif window.count(player) == 2 and window.count(0) == 2:
 		score += 2
-
 	if window.count(opponent) == 3 and window.count(0) == 1:
-		score -= 4
+		score -= 10
 
 	return score
 
@@ -398,18 +397,18 @@ while not game_over:
 		draw_board(board, turn)
 		pygame.display.update()
 
-		if game_over:
-			playerName = None
+	if game_over:
+		playerName = None
 
-			if currPlayer == 1:
-				playerName = "The AI"
-			else:
-				playerName = "You"
-			label = winFont.render(playerName + " won!", True, currColor)
-			text_rect = label.get_rect(center=((WIDTH - 2 * SQUARE_SIZE) / 2, 50))
-			screen.blit(label, text_rect)
-			pygame.display.update()
+		if currPlayer == 1:
+			playerName = "The AI"
+		else:
+			playerName = "You"
+		label = winFont.render(playerName + " won!", True, currColor)
+		text_rect = label.get_rect(center=((WIDTH - 2 * SQUARE_SIZE) / 2, 50))
+		screen.blit(label, text_rect)
+		pygame.display.update()
 
-			pygame.time.wait(3000)
+		pygame.time.wait(3000)
 
 	clock.tick(FPS)
