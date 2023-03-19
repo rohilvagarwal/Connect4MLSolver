@@ -332,6 +332,11 @@ def restart(board):
 			drop_piece(board, r, c, NO_PLAYER)
 	print("I have reset")
 
+	global winner
+	global game_over
+	winner = None
+	game_over = False
+
 	global turn
 	turn = 1
 
@@ -360,6 +365,7 @@ d4 = pygame.image.load("d4.png").convert_alpha()
 d4resized = pygame.transform.scale(d4, (LOGO_SIZE, LOGO_SIZE)).convert_alpha()
 
 game_over = False
+winner = None
 turn = 1
 
 player1 = "AI"
@@ -428,6 +434,7 @@ while not game_over:
 
 						if winning_move(board, HUMAN):
 							game_over = True
+							winner = "You"
 
 						turn += 1
 
@@ -450,6 +457,7 @@ while not game_over:
 
 		if winning_move(board, AI):
 			game_over = True
+			winner = "The AI"
 
 		print_board(board)
 		turn += 1
@@ -457,14 +465,13 @@ while not game_over:
 		pygame.display.update()
 
 	if game_over:
-		playerName = None
-
-		if currPlayer == AI:
-			playerName = "The AI"
+		if winner is None:
+			winnerText = winFont.render("It is a tie!", True, currColor)
+			text_rect = winnerText.get_rect(center=((WIDTH - MENU_WIDTH) / 2, 50))
 		else:
-			playerName = "You"
-		winnerText = winFont.render(playerName + " won!", True, currColor)
-		text_rect = winnerText.get_rect(center=((WIDTH - MENU_WIDTH) / 2, 50))
+			winnerText = winFont.render(winner + " won!", True, currColor)
+			text_rect = winnerText.get_rect(center=((WIDTH - MENU_WIDTH) / 2, 50))
+		
 		screen.blit(winnerText, text_rect)
 		pygame.display.update()
 
