@@ -1,47 +1,9 @@
-import numpy as np
-import pygame
-import sys
-import math
-import random
+from ProjectConstants import *
 
 #1 is AI, 2 is Human
 AI = 1
 HUMAN = 2
 NO_PLAYER = 0
-
-DARK_GREY = pygame.Color("#242526")
-BLUE = pygame.Color("#1357BE")
-RED = pygame.Color("#FF6961")
-YELLOW = pygame.Color("#FDFD96")
-WHITE = pygame.Color("#FFFFFF")
-LIGHT_GREY = pygame.Color("#D3D3D3")
-NAVY_BLUE = pygame.Color("#27285C")
-GREEN = pygame.Color("#77DD77")
-DARK_PURPLE = pygame.Color("#301934")
-GREY = pygame.Color("#4c4c4c")
-TRANSPARENT = (0, 0, 0, 0)
-
-ROW_COUNT = 6
-COLUMN_COUNT = 7
-
-backgroundColor = DARK_GREY
-gameColor = BLUE
-AIcolor = RED
-humanColor = YELLOW
-chipOutlineColor = LIGHT_GREY
-turnColor = WHITE
-menuColor = GREY
-menuTextColor = WHITE
-outlineColor = WHITE
-
-SQUARE_SIZE = 100
-WIDTH = COLUMN_COUNT * SQUARE_SIZE + 2 * SQUARE_SIZE
-MENU_WIDTH = 2 * SQUARE_SIZE
-HEIGHT = (ROW_COUNT + 1) * SQUARE_SIZE
-SIZE = (WIDTH, HEIGHT)
-RADIUS = int(SQUARE_SIZE / 2 - 5)
-OUTLINE_WIDTH = 3
-LOGO_SIZE = 100
 
 clock = pygame.time.Clock()
 FPS = 60
@@ -232,13 +194,13 @@ def minimax(board, depth, alpha, beta, maximizingPlayer):
 
 
 def draw_chip(x, y, player):
-	color = AIcolor
+	color = selfyplayer1Color
 
 	if player == HUMAN:
-		color = humanColor
+		color = selfyplayer2Color
 
 	pygame.draw.circle(screen, color, (x, y), RADIUS)
-	pygame.draw.circle(screen, chipOutlineColor, (x, y), RADIUS, 5)
+	pygame.draw.circle(screen, selfychipOutlineColor, (x, y), RADIUS, 5)
 
 
 def animate_drop(row, col, player):
@@ -250,7 +212,7 @@ def animate_drop(row, col, player):
 	y_curr_pos = y_init_pos
 	while y_curr_pos < y_final_pos:
 		draw_board(board, turn)
-		label = turnFont.render("Turn: " + str(turn), True, turnColor)
+		label = turnFont.render("Turn: " + str(turn), True, selfytextColor)
 		screen.blit(label, (10, 10))
 		draw_chip(x_pos, y_curr_pos, player)
 		draw_board_foreground()
@@ -264,7 +226,7 @@ def animate_drop(row, col, player):
 
 
 def draw_board_foreground():
-	pygame.draw.rect(board_layer, gameColor, (0, 0, WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE))  #Board
+	pygame.draw.rect(board_layer, selfyboardColor, (0, 0, WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE))  #Board
 	for c in range(COLUMN_COUNT):
 		for r in range(ROW_COUNT):
 			pygame.draw.circle(board_layer, TRANSPARENT,
@@ -272,21 +234,21 @@ def draw_board_foreground():
 
 	board_layer.convert_alpha()
 
-	pygame.draw.rect(board_layer, outlineColor, (0, 0, WIDTH - MENU_WIDTH, OUTLINE_WIDTH))  #Horizontal Outline
-	pygame.draw.rect(board_layer, outlineColor, (WIDTH - MENU_WIDTH - OUTLINE_WIDTH, 0, OUTLINE_WIDTH, HEIGHT - SQUARE_SIZE))  #Vertical Outline
+	pygame.draw.rect(board_layer, selfygameDividerColor, (0, 0, WIDTH - MENU_WIDTH, OUTLINE_WIDTH))  #Horizontal Outline
+	pygame.draw.rect(board_layer, selfygameDividerColor, (WIDTH - MENU_WIDTH - OUTLINE_WIDTH, 0, OUTLINE_WIDTH, HEIGHT - SQUARE_SIZE))  #Vertical Outline
 
 	screen.blit(board_layer, (0, SQUARE_SIZE))
 
 
 def draw_top():
-	pygame.draw.rect(screen, backgroundColor, (0, 0, WIDTH - MENU_WIDTH, SQUARE_SIZE))
-	turnCount = turnFont.render("Turn: " + str(turn), True, turnColor)
+	pygame.draw.rect(screen, selfybgColor, (0, 0, WIDTH - MENU_WIDTH, SQUARE_SIZE))
+	turnCount = turnFont.render("Turn: " + str(turn), True, selfytextColor)
 	screen.blit(turnCount, (10, 10))
-	pygame.draw.rect(screen, outlineColor, (WIDTH - MENU_WIDTH - OUTLINE_WIDTH, 0, OUTLINE_WIDTH, SQUARE_SIZE))  #Vertical Outline
+	pygame.draw.rect(screen, selfygameDividerColor, (WIDTH - MENU_WIDTH - OUTLINE_WIDTH, 0, OUTLINE_WIDTH, SQUARE_SIZE))  #Vertical Outline
 
 
 def draw_menu():
-	pygame.draw.rect(menu_layer, menuColor, (0, 0, SQUARE_SIZE * 2, HEIGHT))  #Menu
+	pygame.draw.rect(menu_layer, selfymenuColor, (0, 0, SQUARE_SIZE * 2, HEIGHT))  #Menu
 	menu_layer.blit(d4resized, (MENU_WIDTH - LOGO_SIZE, HEIGHT - LOGO_SIZE))  #Logo
 
 	restartText = menuFont.render("Restart", True, menuTextColor)
@@ -298,14 +260,14 @@ def draw_menu():
 
 def draw_board(board, turn=None):
 	if turn is None:
-		pygame.draw.rect(screen, backgroundColor, (0, 0, WIDTH - MENU_WIDTH, SQUARE_SIZE))  #Top
+		pygame.draw.rect(screen, selfybgColor, (0, 0, WIDTH - MENU_WIDTH, SQUARE_SIZE))  #Top
 	else:
 		draw_top()
 
 	draw_menu()
 
-	pygame.draw.rect(screen, backgroundColor, (0, SQUARE_SIZE, WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE))  #Behind Board
-	pygame.draw.rect(board_layer, gameColor, (0, 0, WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE))  #Board
+	pygame.draw.rect(screen, selfybgColor, (0, SQUARE_SIZE, WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE))  #Behind Board
+	pygame.draw.rect(board_layer, selfyboardColor, (0, 0, WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE))  #Board
 
 	for c in range(COLUMN_COUNT):
 		for r in range(ROW_COUNT):
@@ -322,8 +284,8 @@ def draw_board(board, turn=None):
 			elif board[r][c] == HUMAN:
 				draw_chip(int(c * SQUARE_SIZE + SQUARE_SIZE / 2), HEIGHT - int(r * SQUARE_SIZE + SQUARE_SIZE / 2), HUMAN)
 
-	pygame.draw.rect(screen, outlineColor, (0, SQUARE_SIZE, WIDTH - MENU_WIDTH, OUTLINE_WIDTH))  #Horizontal Outline
-	pygame.draw.rect(screen, outlineColor, (WIDTH - MENU_WIDTH - OUTLINE_WIDTH, 0, OUTLINE_WIDTH, HEIGHT))  #Vertical Outline
+	pygame.draw.rect(screen, selfygameDividerColor, (0, SQUARE_SIZE, WIDTH - MENU_WIDTH, OUTLINE_WIDTH))  #Horizontal Outline
+	pygame.draw.rect(screen, selfygameDividerColor, (WIDTH - MENU_WIDTH - OUTLINE_WIDTH, 0, OUTLINE_WIDTH, HEIGHT))  #Vertical Outline
 
 
 def restart(board):
@@ -391,17 +353,17 @@ while not game_over:
 	if player1 == "AI":
 		if turn % 2 == 0:
 			currPlayer = HUMAN
-			currColor = humanColor
+			currColor = selfyplayer2Color
 		else:
 			currPlayer = AI
-			currColor = AIcolor
+			currColor = selfyplayer1Color
 	else:
 		if turn % 2 == 0:
 			currPlayer = AI
-			currColor = AIcolor
+			currColor = selfyplayer1Color
 		else:
 			currPlayer = HUMAN
-			currColor = humanColor
+			currColor = selfyplayer2Color
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
@@ -463,6 +425,9 @@ while not game_over:
 		turn += 1
 		draw_board(board, turn)
 		pygame.display.update()
+
+	if not np.any(board == 0):
+		game_over = True
 
 	if game_over:
 		if winner is None:
