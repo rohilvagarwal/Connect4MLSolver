@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a649f482-3bb0-42fb-a28b-5974fd8ca95d" name="Changes" comment="finishing ML Connect 4 implementation and reorganizing file structure" />
+    <list default="true" id="a649f482-3bb0-42fb-a28b-5974fd8ca95d" name="Changes" comment="adding requirements.txt">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,7 +24,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RunManager">
@@ -69,7 +71,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690825640993</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="adding requirements.txt">
+      <created>1690825757916</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1690825757916</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -85,6 +94,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="finishing ML Connect 4 implementation and reorganizing file structure" />
-    <option name="LAST_COMMIT_MESSAGE" value="finishing ML Connect 4 implementation and reorganizing file structure" />
+    <MESSAGE value="adding requirements.txt" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding requirements.txt" />
   </component>
 </project>
