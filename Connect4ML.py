@@ -1,12 +1,12 @@
 import sys
 from ProjectConstants import *
-from GameLogic.Connect4GameLogic import Connect4GameLogic
+from GameLogic.Connect4MLGameLogic import Connect4MLGameLogic
 
 screen = pygame.display.set_mode(SIZE)
 
 GAME_QUIT = False
 
-game = Connect4GameLogic(ROW_COUNT, COLUMN_COUNT, "Player 1", "Player 2")
+game = Connect4MLGameLogic(ROW_COUNT, COLUMN_COUNT, "The ML", "You")
 
 while not GAME_QUIT:
 	GAME_QUIT = game.get_quit()

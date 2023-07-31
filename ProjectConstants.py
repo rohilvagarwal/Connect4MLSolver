@@ -1,8 +1,4 @@
-import numpy as np
 import pygame
-import sys
-import math
-import random
 
 pygame.init()
 clock = pygame.time.Clock()

@@ -1,20 +1,8 @@
 from ProjectConstants import *
-from Button import Button
-
-
-# def temp_drop_piece(board, row, col, player):
-# 	board[row][col] = player
-#
-# def if_valid_column(board, col):
-# 	topRow = board[ROW_COUNT - 1][col]
-# 	return topRow == NO_PLAYER
-#
-# def get_next_open_row(board, col):
-# 	for r in range(ROW_COUNT):
-# 		position = board[r][col]
-# 		if np.any(position == NO_PLAYER):
-# 			return r
-
+from UIElements.Button import Button
+import numpy as np
+import random
+import math
 
 class Connect4GameLogic:
 	def __init__(self, rowCount, columnCount, player1Name, player2Name):
@@ -65,7 +53,7 @@ class Connect4GameLogic:
 		self.menuFont = pygame.font.SysFont("jost700", 30)
 
 		#picture imports
-		d4 = pygame.image.load("d4.png").convert_alpha()
+		d4 = pygame.image.load("UIElements/d4.png").convert_alpha()
 		self.d4resized = pygame.transform.scale(d4, (LOGO_SIZE, LOGO_SIZE)).convert_alpha()
 
 	def get_quit(self):
@@ -88,11 +76,11 @@ class Connect4GameLogic:
 		self.currColor = self.playerColorDict[self.currPlayer]
 
 	def if_valid_column(self, col):
-		topRow = self.board[ROW_COUNT - 1][col]
+		topRow = self.board[self.rowCount - 1][col]
 		return topRow == self.noPlayerNum
 
 	def get_next_open_row(self, col):
-		for r in range(ROW_COUNT):
+		for r in range(self.rowCount):
 			position = self.board[r][col]
 			if np.any(position == self.noPlayerNum):
 				return r
@@ -105,26 +93,26 @@ class Connect4GameLogic:
 	def check_game_over(self):
 		def winning_move(board, player):
 			# Check horizontal locations for win
-			for c in range(COLUMN_COUNT - 3):
-				for r in range(ROW_COUNT):
+			for c in range(self.columnCount - 3):
+				for r in range(self.rowCount):
 					if board[r][c] == player and board[r][c + 1] == player and board[r][c + 2] == player and board[r][c + 3] == player:
 						return True
 
 			# Check vertical locations for win
-			for c in range(COLUMN_COUNT):
-				for r in range(ROW_COUNT - 3):
+			for c in range(self.columnCount):
+				for r in range(self.rowCount - 3):
 					if board[r][c] == player and board[r + 1][c] == player and board[r + 2][c] == player and board[r + 3][c] == player:
 						return True
 
 			# Check positively sloped diagonals
-			for c in range(COLUMN_COUNT - 3):
-				for r in range(ROW_COUNT - 3):
+			for c in range(self.columnCount - 3):
+				for r in range(self.rowCount - 3):
 					if board[r][c] == player and board[r + 1][c + 1] == player and board[r + 2][c + 2] == player and board[r + 3][c + 3] == player:
 						return True
 
 			# Check negatively sloped diagonals
-			for c in range(COLUMN_COUNT - 3):
-				for r in range(3, ROW_COUNT):
+			for c in range(self.columnCount - 3):
+				for r in range(3, self.rowCount):
 					if board[r][c] == player and board[r - 1][c + 1] == player and board[r - 2][c + 2] == player and board[r - 3][c + 3] == player:
 						return True
 
@@ -138,6 +126,7 @@ class Connect4GameLogic:
 			self.turn -= 1
 		elif not np.any(self.board == 0):
 			self.gameOver = True
+			self.turn -= 1
 
 	#ui
 	def draw_chip(self, screen, x, y, color, ifOutline):
@@ -156,13 +145,13 @@ class Connect4GameLogic:
 		#Draw empty spots
 		pygame.draw.rect(board_layer, self.boardColor, (0, 0, WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE))  #Board
 
-		for c in range(COLUMN_COUNT):
-			for r in range(ROW_COUNT):
+		for c in range(self.columnCount):
+			for r in range(self.rowCount):
 				self.draw_chip(board_layer, int(c * SQUARE_SIZE + SQUARE_SIZE / 2), int(r * SQUARE_SIZE + SQUARE_SIZE / 2), self.transparentColor, False)
 
 		#Draw chips on board
-		for c in range(COLUMN_COUNT):
-			for r in range(ROW_COUNT):
+		for c in range(self.columnCount):
+			for r in range(self.rowCount):
 				if self.board[r][c] == self.player1Num:
 					self.draw_chip(board_layer, int(c * SQUARE_SIZE + SQUARE_SIZE / 2), int(HEIGHT - 2 * SQUARE_SIZE - r * SQUARE_SIZE + SQUARE_SIZE / 2), self.player1Color,
 								   True)
@@ -173,6 +162,7 @@ class Connect4GameLogic:
 
 	def animate_drop(self, screen, col):
 		board_layer = pygame.Surface((WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE)).convert_alpha()
+		menu_layer = pygame.Surface((MENU_WIDTH, HEIGHT)).convert_alpha()
 
 		xPos = int(col * SQUARE_SIZE + SQUARE_SIZE / 2)
 		yInitPos = int(SQUARE_SIZE / 2)
@@ -181,6 +171,11 @@ class Connect4GameLogic:
 		currVelocity = initial_velocity
 
 		while yCurrPos < yFinalPos:
+			#Draw Menu
+			self.draw_menu(menu_layer)
+			screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
+			self.draw_menu_items(screen)
+
 			self.draw_background(screen)
 			self.draw_chip(screen, xPos, yCurrPos, self.currColor, True)
 			self.draw_board_foreground(board_layer)
@@ -190,6 +185,17 @@ class Connect4GameLogic:
 			currVelocity += gravity
 			yCurrPos += int(currVelocity / FPS)
 			clock.tick(FPS)
+
+		#Draw Menu
+		self.draw_menu(menu_layer)
+		screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
+		self.draw_menu_items(screen)
+
+		self.draw_background(screen)
+		self.draw_chip(screen, xPos, yFinalPos, self.currColor, True)
+		self.draw_board_foreground(board_layer)
+		screen.blit(board_layer, (0, SQUARE_SIZE))
+		pygame.display.update()
 
 	def draw_outlines(self, screen):
 		#Draw outlines
@@ -280,6 +286,7 @@ class Connect4GameLogic:
 			self.draw_outlines(screen)
 
 			if self.winnerName is None:
+				self.recalculate_curr_player()
 				draw_text_center(screen, (WIDTH - MENU_WIDTH) / 2, SQUARE_SIZE / 2, "It is a tie!", self.textColor, self.winFont)
 			else:
 				self.recalculate_curr_player()
