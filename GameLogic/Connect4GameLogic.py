@@ -261,23 +261,25 @@ class Connect4GameLogic:
 
 		self.draw_background(screen)
 
+		#Draw Menu
+		self.draw_menu(menu_layer)
+		screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
+		self.draw_menu_items(screen)
+
 		if not self.gameOver:
 			mouseX, mouseY = pygame.mouse.get_pos()
 
-			#Draw Menu
-			self.draw_menu(menu_layer)
-			screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
-			self.draw_menu_items(screen)
-
 			if self.ifAnimating:
-				self.draw_chip(screen, self.animatingXPos, self.animatingYCurrPos, self.currColor, True)
-
-				self.animatingCurrVelocity += gravity
-				self.animatingYCurrPos += self.animatingCurrVelocity // FPS
-
 				if self.animatingYCurrPos > self.animatingYFinalPos:
+					self.draw_chip(screen, self.animatingXPos, self.animatingYFinalPos, self.currColor, True)
 					self.ifAnimating = False
 					self.drop_piece(self.animatingCol)
+
+				else:
+					self.draw_chip(screen, self.animatingXPos, self.animatingYCurrPos, self.currColor, True)
+
+					self.animatingCurrVelocity += gravity
+					self.animatingYCurrPos += self.animatingCurrVelocity // FPS
 
 			else:
 				#Draw hovering chip
@@ -296,21 +298,9 @@ class Connect4GameLogic:
 					self.animatingYFinalPos = HEIGHT - int(self.get_next_open_row(columnDropped) * SQUARE_SIZE + SQUARE_SIZE / 2)
 					self.animatingCurrVelocity = initial_velocity
 
-			#Board
-			self.draw_board_foreground(board_layer)
-			screen.blit(board_layer, (0, SQUARE_SIZE))
-
-			self.draw_outlines(screen)
-
 			self.check_game_over()
 
 		else:
-			#Board
-			self.draw_board_foreground(board_layer)
-			screen.blit(board_layer, (0, SQUARE_SIZE))
-
-			self.draw_outlines(screen)
-
 			if self.winnerName is None:
 				self.recalculate_curr_player()
 				draw_text_center(screen, (WIDTH - MENU_WIDTH) / 2, SQUARE_SIZE / 2, "It is a tie!", self.textColor, self.winFont)
@@ -318,10 +308,11 @@ class Connect4GameLogic:
 				self.recalculate_curr_player()
 				draw_text_center(screen, (WIDTH - MENU_WIDTH) / 2, SQUARE_SIZE / 2, self.winnerName + " won!", self.currColor, self.winFont)
 
-			#Draw Menu
-			self.draw_menu(menu_layer)
-			screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
-			self.draw_menu_items(screen)
+		#Board
+		self.draw_board_foreground(board_layer)
+		screen.blit(board_layer, (0, SQUARE_SIZE))
+
+		self.draw_outlines(screen)
 
 	def print_board(self):
 		print(np.flip(self.board, 0))

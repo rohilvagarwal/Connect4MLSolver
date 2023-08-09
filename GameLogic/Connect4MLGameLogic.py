@@ -187,19 +187,28 @@ class Connect4MLGameLogic(Connect4GameLogic):
 		board_layer = pygame.Surface((WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE)).convert_alpha()
 		menu_layer = pygame.Surface((MENU_WIDTH, HEIGHT)).convert_alpha()
 
+		self.draw_background(screen)
+
 		#Draw Menu
 		self.draw_menu(menu_layer)
 		screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
 		self.draw_menu_items(screen)
 
-		#Board
-		self.draw_background(screen)
-		self.draw_board_foreground(board_layer)
-		screen.blit(board_layer, (0, SQUARE_SIZE))
-
 		if not self.gameOver:
+			if self.ifAnimating:
+				if self.animatingYCurrPos > self.animatingYFinalPos:
+					self.draw_chip(screen, self.animatingXPos, self.animatingYFinalPos, self.currColor, True)
+					self.ifAnimating = False
+					self.drop_piece(self.animatingCol)
+
+				else:
+					self.draw_chip(screen, self.animatingXPos, self.animatingYCurrPos, self.currColor, True)
+
+					self.animatingCurrVelocity += gravity
+					self.animatingYCurrPos += self.animatingCurrVelocity // FPS
+
 			#if current player is human
-			if self.humanNum == self.currPlayer:
+			elif self.humanNum == self.currPlayer:
 				mouseX, mouseY = pygame.mouse.get_pos()
 
 				#Draw hovering chip
@@ -210,24 +219,38 @@ class Connect4MLGameLogic(Connect4GameLogic):
 				#Drop piece if clicked
 				columnDropped = self.check_if_piece_added()
 				if columnDropped is not None:
-					self.animate_drop(screen, columnDropped)
-					self.drop_piece(columnDropped)
+					self.ifAnimating = True
+					self.animatingCol = columnDropped
+					self.animatingXPos = int(columnDropped * SQUARE_SIZE + SQUARE_SIZE / 2)
+					self.animatingYInitPos = int(SQUARE_SIZE / 2)
+					self.animatingYCurrPos = self.animatingYInitPos
+					self.animatingYFinalPos = HEIGHT - int(self.get_next_open_row(columnDropped) * SQUARE_SIZE + SQUARE_SIZE / 2)
+					self.animatingCurrVelocity = initial_velocity
 
 			#if current player is ML
 			else:
-				col = ml_minimax(self.board, 5, -math.inf, math.inf, True, self.noPlayerNum, self.mlNum, self.humanNum)[0]
-				self.animate_drop(screen, col)
-				self.drop_piece(col)
+				columnDropped = ml_minimax(self.board, 5, -math.inf, math.inf, True, self.noPlayerNum, self.mlNum, self.humanNum)[0]
 
-			self.draw_outlines(screen)
+				self.ifAnimating = True
+				self.animatingCol = columnDropped
+				self.animatingXPos = int(columnDropped * SQUARE_SIZE + SQUARE_SIZE / 2)
+				self.animatingYInitPos = int(SQUARE_SIZE / 2)
+				self.animatingYCurrPos = self.animatingYInitPos
+				self.animatingYFinalPos = HEIGHT - int(self.get_next_open_row(columnDropped) * SQUARE_SIZE + SQUARE_SIZE / 2)
+				self.animatingCurrVelocity = initial_velocity
+
 			self.check_game_over()
 
 		else:
-			self.draw_outlines(screen)
-
 			if self.winnerName is None:
 				self.recalculate_curr_player()
 				draw_text_center(screen, (WIDTH - MENU_WIDTH) / 2, SQUARE_SIZE / 2, "It is a tie!", self.textColor, self.winFont)
 			else:
 				self.recalculate_curr_player()
 				draw_text_center(screen, (WIDTH - MENU_WIDTH) / 2, SQUARE_SIZE / 2, self.winnerName + " won!", self.currColor, self.winFont)
+
+		#Board
+		self.draw_board_foreground(board_layer)
+		screen.blit(board_layer, (0, SQUARE_SIZE))
+
+		self.draw_outlines(screen)

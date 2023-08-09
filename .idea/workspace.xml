@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a649f482-3bb0-42fb-a28b-5974fd8ca95d" name="Changes" comment="moving display update logic to main.py to show on web">
+    <list default="true" id="a649f482-3bb0-42fb-a28b-5974fd8ca95d" name="Changes" comment="moving animate drop method logic in default game to draw_board">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameLogic/Connect4GameLogic.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameLogic/Connect4GameLogic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameLogic/Connect4MLGameLogic.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameLogic/Connect4MLGameLogic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,7 +202,14 @@
       <option name="project" value="LOCAL" />
       <updated>1691605151462</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="moving animate drop method logic in default game to draw_board">
+      <created>1691608235578</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1691608235578</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -226,6 +232,7 @@
     <MESSAGE value="adding about me page" />
     <MESSAGE value="adding web support" />
     <MESSAGE value="moving display update logic to main.py to show on web" />
-    <option name="LAST_COMMIT_MESSAGE" value="moving display update logic to main.py to show on web" />
+    <MESSAGE value="moving animate drop method logic in default game to draw_board" />
+    <option name="LAST_COMMIT_MESSAGE" value="moving animate drop method logic in default game to draw_board" />
   </component>
 </project>
