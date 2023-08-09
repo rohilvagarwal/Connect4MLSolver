@@ -5,8 +5,9 @@ import random
 import math
 
 class Connect4GameLogic:
-	def __init__(self, rowCount, columnCount, player1Name, player2Name, update_game_state):
+	def __init__(self, rowCount, columnCount, player1Name, player2Name, update_game_state, display_update):
 		self.update_game_state = update_game_state
+		self.display_update = display_update
 
 		#design
 		self.bgColor = DARK_GREY
@@ -182,7 +183,7 @@ class Connect4GameLogic:
 			self.draw_board_foreground(board_layer)
 			screen.blit(board_layer, (0, SQUARE_SIZE))
 			self.draw_outlines(screen)
-			pygame.display.update()
+			self.display_update()
 			currVelocity += gravity
 			yCurrPos += int(currVelocity / FPS)
 			clock.tick(FPS)
@@ -196,7 +197,7 @@ class Connect4GameLogic:
 		self.draw_chip(screen, xPos, yFinalPos, self.currColor, True)
 		self.draw_board_foreground(board_layer)
 		screen.blit(board_layer, (0, SQUARE_SIZE))
-		pygame.display.update()
+		self.display_update()
 
 	def draw_outlines(self, screen):
 		#Draw outlines

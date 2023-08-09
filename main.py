@@ -3,12 +3,6 @@ import asyncio
 import sys
 from ProjectConstants import *
 
-
-def update_game_state(new_state):
-	global gameState
-	gameState = new_state
-
-
 screen = pygame.display.set_mode(SIZE)
 pygame.display.set_caption("Connect 4: ML Solver")
 
@@ -17,8 +11,15 @@ from ExtraPages.AboutMe import draw_about_me
 from GameLogic.Connect4MLGameLogic import Connect4MLGameLogic
 from GameLogic.Connect4GameLogic import Connect4GameLogic
 
-mlGame = Connect4MLGameLogic(ROW_COUNT, COLUMN_COUNT, "You", "The ML", update_game_state)
-defaultGame = Connect4GameLogic(ROW_COUNT, COLUMN_COUNT, "Red", "Yellow", update_game_state)
+def update_game_state(new_state):
+	global gameState
+	gameState = new_state
+
+def display_update():
+	pygame.display.update()
+
+mlGame = Connect4MLGameLogic(ROW_COUNT, COLUMN_COUNT, "You", "The ML", update_game_state, display_update)
+defaultGame = Connect4GameLogic(ROW_COUNT, COLUMN_COUNT, "Red", "Yellow", update_game_state, display_update)
 
 gameState = "Menu"  #ML Solver, Default Game
 

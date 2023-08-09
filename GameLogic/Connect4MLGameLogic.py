@@ -169,8 +169,8 @@ def ml_minimax(board, depth, alpha, beta, maximizingPlayer, noPlayerNum, mlNum, 
 		return [column, value]
 
 class Connect4MLGameLogic(Connect4GameLogic):
-	def __init__(self, rowCount, columnCount, humanName, mlName, update_game_state):
-		super().__init__(rowCount, columnCount, humanName, mlName, update_game_state)
+	def __init__(self, rowCount, columnCount, humanName, mlName, update_game_state, display_update):
+		super().__init__(rowCount, columnCount, humanName, mlName, update_game_state, display_update)
 		self.humanName = humanName
 		self.mlName = mlName
 
