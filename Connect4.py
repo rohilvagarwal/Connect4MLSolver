@@ -3,14 +3,13 @@ from ProjectConstants import *
 from GameLogic.Connect4GameLogic import Connect4GameLogic
 
 screen = pygame.display.set_mode(SIZE)
+pygame.display.set_caption("Connect 4: Default Game")
 
 GAME_QUIT = False
 
-game = Connect4GameLogic(ROW_COUNT, COLUMN_COUNT, "Player 1", "Player 2")
+game = Connect4GameLogic(ROW_COUNT, COLUMN_COUNT, "Red", "Yellow")
 
 while not GAME_QUIT:
-	GAME_QUIT = game.get_quit()
-
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			GAME_QUIT = True

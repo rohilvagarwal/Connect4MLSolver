@@ -5,7 +5,9 @@ import random
 import math
 
 class Connect4GameLogic:
-	def __init__(self, rowCount, columnCount, player1Name, player2Name):
+	def __init__(self, rowCount, columnCount, player1Name, player2Name, update_game_state):
+		self.update_game_state = update_game_state
+
 		#design
 		self.bgColor = DARK_GREY
 		self.boardColor = BLUE
@@ -38,12 +40,11 @@ class Connect4GameLogic:
 			self.player2Num: self.player2Name
 		}
 
-		self.quit = False
 		self.gameOver = False
 		self.board = np.zeros((rowCount, columnCount))
 		self.turn = 1
 		self.winnerName = None
-		self.firstPlayer = random.randint(self.player1Num, self.player2Num)
+		self.firstPlayer = self.player1Num
 		self.currPlayer = self.firstPlayer
 		self.currColor = self.playerColorDict[self.currPlayer]
 
@@ -56,16 +57,16 @@ class Connect4GameLogic:
 		d4 = pygame.image.load("UIElements/d4.png").convert_alpha()
 		self.d4resized = pygame.transform.scale(d4, (LOGO_SIZE, LOGO_SIZE)).convert_alpha()
 
-	def get_quit(self):
-		return self.quit
-
 	def restart(self):
 		self.gameOver = False
 		self.board.fill(self.noPlayerNum)
 		self.turn = 1
 		self.winnerName = None
-		self.firstPlayer = random.randint(self.player1Num, self.player2Num)
+		#self.firstPlayer = random.randint(self.player1Num, self.player2Num)
 		self.recalculate_curr_player()
+
+	def switch_first_player(self):
+		self.firstPlayer = self.player2Num if self.firstPlayer == self.player1Num else self.player1Num
 
 	def recalculate_curr_player(self):
 		if self.firstPlayer == self.player1Num:
@@ -205,25 +206,31 @@ class Connect4GameLogic:
 	def draw_menu(self, menu_layer):
 		pygame.draw.rect(menu_layer, self.menuColor, (0, 0, SQUARE_SIZE * 2, HEIGHT))  #Menu
 		menu_layer.blit(self.d4resized, (MENU_WIDTH - LOGO_SIZE, HEIGHT - LOGO_SIZE))  #Logo
+		draw_text_center(menu_layer, MENU_WIDTH // 2, SQUARE_SIZE // 2, "Connect 4", self.textColor, self.menuFont)
 
-		pygame.draw.circle(menu_layer, self.playerColorDict[self.firstPlayer], (MENU_WIDTH / 5, HEIGHT - 200), RADIUS / 2)
-		pygame.draw.circle(menu_layer, self.chipOutlineColor, (MENU_WIDTH / 5, HEIGHT - 200), RADIUS / 2, int(5 / 2))
-		draw_text_left(menu_layer, MENU_WIDTH / 3, HEIGHT - 200, self.playerNameDict[self.firstPlayer], self.textColor, self.turnFont)
+		pygame.draw.circle(menu_layer, self.playerColorDict[self.firstPlayer], (MENU_WIDTH / 5, 3 * SQUARE_SIZE), RADIUS / 2)
+		pygame.draw.circle(menu_layer, self.chipOutlineColor, (MENU_WIDTH / 5, 3 * SQUARE_SIZE), RADIUS / 2, int(5 / 2))
+		draw_text_left(menu_layer, MENU_WIDTH / 3, 3 * SQUARE_SIZE, "P1: " + self.playerNameDict[self.firstPlayer], self.textColor, self.turnFont)
 
-		pygame.draw.circle(menu_layer, self.playerColorDict[self.firstPlayer + 1] if self.firstPlayer == self.player1Num else self.playerColorDict[self.firstPlayer - 1], (MENU_WIDTH / 5, HEIGHT - 150), RADIUS / 2)
-		pygame.draw.circle(menu_layer, self.chipOutlineColor, (MENU_WIDTH / 5, HEIGHT - 150), RADIUS / 2, int(5 / 2))
-		draw_text_left(menu_layer, MENU_WIDTH / 3, HEIGHT - 150, self.playerNameDict[self.firstPlayer + 1] if self.firstPlayer == self.player1Num else self.playerNameDict[self.firstPlayer - 1], self.textColor, self.turnFont)
+		pygame.draw.circle(menu_layer, self.playerColorDict[self.firstPlayer + 1] if self.firstPlayer == self.player1Num else self.playerColorDict[self.firstPlayer - 1], (MENU_WIDTH / 5, SQUARE_SIZE * 7 // 2), RADIUS / 2)
+		pygame.draw.circle(menu_layer, self.chipOutlineColor, (MENU_WIDTH / 5, SQUARE_SIZE * 7 // 2), RADIUS / 2, int(5 / 2))
+		draw_text_left(menu_layer, MENU_WIDTH / 3, SQUARE_SIZE * 7 // 2, "P2: " + self.playerNameDict[self.firstPlayer + 1] if self.firstPlayer == self.player1Num else "P2: " + self.playerNameDict[self.firstPlayer - 1], self.textColor, self.turnFont)
 
 
 	def draw_menu_items(self, screen):
-		restartButton = Button(WIDTH - MENU_WIDTH / 2, HEIGHT / 4, MENU_WIDTH * 3 / 4, 50, self.menuFont, 10, "Restart")
-		quitButton = Button(WIDTH - MENU_WIDTH / 2, HEIGHT / 4 + 100, MENU_WIDTH * 3 / 4, 50, self.menuFont, 10, "Quit")
+		restartButton = Button(WIDTH - MENU_WIDTH / 2, HEIGHT / 4, MENU_WIDTH * 4 / 5, 50, self.menuFont, 10, "Restart")
+		switchButton = Button(WIDTH - MENU_WIDTH / 2, HEIGHT / 4 + SQUARE_SIZE * 2 // 3, MENU_WIDTH * 4 / 5, 50, self.menuFont, 10, "Switch P1")
+		menuButton = Button(WIDTH - MENU_WIDTH / 2, HEIGHT - SQUARE_SIZE * 4 // 3, MENU_WIDTH * 4 / 5, 50, font30, 10, "Menu")
 
 		if restartButton.draw_and_check_click(screen):
 			self.restart()
 
-		if quitButton.draw_and_check_click(screen):
-			self.quit = True
+		if switchButton.draw_and_check_click(screen):
+			self.switch_first_player()
+			self.restart()
+
+		if menuButton.draw_and_check_click(screen):
+			self.update_game_state("Menu")
 
 	def check_if_piece_added(self):
 		if ifClicked():

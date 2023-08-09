@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a649f482-3bb0-42fb-a28b-5974fd8ca95d" name="Changes" comment="updating .idea folder">
+    <list default="true" id="a649f482-3bb0-42fb-a28b-5974fd8ca95d" name="Changes" comment="condensing code">
+      <change afterPath="$PROJECT_DIR$/ExtraPages/Menu.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Connect4.py" beforeDir="false" afterPath="$PROJECT_DIR$/Connect4.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Connect4ML.py" beforeDir="false" afterPath="$PROJECT_DIR$/Connect4ML.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameLogic/Connect4GameLogic.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameLogic/Connect4GameLogic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameLogic/Connect4MLGameLogic.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameLogic/Connect4MLGameLogic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectConstants.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectConstants.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -43,6 +54,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Connect4.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Connect4GameLogic" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Connect4MLSolver" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/GameLogic" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/GameLogic/Connect4GameLogic.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -97,6 +129,7 @@
       <list>
         <item itemvalue="Python.Connect4ML" />
         <item itemvalue="Python.Connect4" />
+        <item itemvalue="Python.Connect4GameLogic" />
         <item itemvalue="Python.Connect4MLGameLogic" />
       </list>
     </recent_temporary>
@@ -131,7 +164,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690828688417</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="condensing code">
+      <created>1691544503240</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1691544503240</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -149,6 +189,7 @@
     <MESSAGE value="finishing ML Connect 4 implementation and reorganizing file structure" />
     <MESSAGE value="adding requirements.txt" />
     <MESSAGE value="updating .idea folder" />
-    <option name="LAST_COMMIT_MESSAGE" value="updating .idea folder" />
+    <MESSAGE value="condensing code" />
+    <option name="LAST_COMMIT_MESSAGE" value="condensing code" />
   </component>
 </project>

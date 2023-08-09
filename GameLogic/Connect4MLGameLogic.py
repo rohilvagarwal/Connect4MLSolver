@@ -169,15 +169,19 @@ def ml_minimax(board, depth, alpha, beta, maximizingPlayer, noPlayerNum, mlNum, 
 		return [column, value]
 
 class Connect4MLGameLogic(Connect4GameLogic):
-	def __init__(self, rowCount, columnCount, mlName, humanName):
-		super().__init__(rowCount, columnCount, mlName, humanName)
-		self.mlName = mlName
+	def __init__(self, rowCount, columnCount, humanName, mlName, update_game_state):
+		super().__init__(rowCount, columnCount, humanName, mlName, update_game_state)
 		self.humanName = humanName
+		self.mlName = mlName
 
 		self.playerNumDict = {name: num for num, name in self.playerNameDict.items()}
 
-		self.mlNum = self.playerNumDict[self.mlName]
 		self.humanNum = self.playerNumDict[self.humanName]
+		self.mlNum = self.playerNumDict[self.mlName]
+
+	def draw_menu(self, menu_layer):
+		super().draw_menu(menu_layer)
+		draw_text_center(menu_layer, MENU_WIDTH // 2, SQUARE_SIZE * 4 / 5, "ML Solver", self.textColor, self.menuFont)
 
 	def draw_board(self, screen):
 		board_layer = pygame.Surface((WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE)).convert_alpha()

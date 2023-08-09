@@ -50,6 +50,7 @@ font10 = pygame.font.SysFont("jost700", 10)
 font20 = pygame.font.SysFont("jost700", 20)
 font25 = pygame.font.SysFont("jost700", 25)
 font30 = pygame.font.SysFont("jost700", 30)
+font40 = pygame.font.SysFont("jost700", 40)
 font70 = pygame.font.SysFont("jost700", 70)
 
 
