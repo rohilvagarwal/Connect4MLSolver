@@ -242,18 +242,18 @@ class Connect4GameLogic:
 		board_layer = pygame.Surface((WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE)).convert_alpha()
 		menu_layer = pygame.Surface((MENU_WIDTH, HEIGHT)).convert_alpha()
 
+		#Draw Menu
+		self.draw_menu(menu_layer)
+		screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
+		self.draw_menu_items(screen)
+
+		#Board
+		self.draw_background(screen)
+		self.draw_board_foreground(board_layer)
+		screen.blit(board_layer, (0, SQUARE_SIZE))
+
 		if not self.gameOver:
 			mouseX, mouseY = pygame.mouse.get_pos()
-
-			#Draw Menu
-			self.draw_menu(menu_layer)
-			screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
-			self.draw_menu_items(screen)
-
-			#Board
-			self.draw_background(screen)
-			self.draw_board_foreground(board_layer)
-			screen.blit(board_layer, (0, SQUARE_SIZE))
 
 			#Draw hovering chip
 			if 0 < mouseX < WIDTH - MENU_WIDTH:
@@ -272,17 +272,6 @@ class Connect4GameLogic:
 			self.check_game_over()
 
 		else:
-			#Draw Menu
-			self.draw_menu(menu_layer)
-			screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
-
-			self.draw_menu_items(screen)
-
-			#Board
-			self.draw_background(screen)
-			self.draw_board_foreground(board_layer)
-			screen.blit(board_layer, (0, SQUARE_SIZE))
-
 			self.draw_outlines(screen)
 
 			if self.winnerName is None:
