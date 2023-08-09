@@ -170,44 +170,6 @@ class Connect4GameLogic:
 					self.draw_chip(board_layer, int(c * SQUARE_SIZE + SQUARE_SIZE / 2), int(HEIGHT - 2 * SQUARE_SIZE - r * SQUARE_SIZE + SQUARE_SIZE / 2), self.player2Color,
 								   True)
 
-
-	def animate_drop(self, screen, col):
-		board_layer = pygame.Surface((WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE)).convert_alpha()
-		menu_layer = pygame.Surface((MENU_WIDTH, HEIGHT)).convert_alpha()
-
-		xPos = int(col * SQUARE_SIZE + SQUARE_SIZE / 2)
-		yInitPos = int(SQUARE_SIZE / 2)
-		yCurrPos = yInitPos
-		yFinalPos = HEIGHT - int(self.get_next_open_row(col) * SQUARE_SIZE + SQUARE_SIZE / 2)
-		currVelocity = initial_velocity
-
-		while yCurrPos < yFinalPos:
-			#Draw Menu
-			self.draw_menu(menu_layer)
-			screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
-			self.draw_menu_items(screen)
-
-			self.draw_background(screen)
-			self.draw_chip(screen, xPos, yCurrPos, self.currColor, True)
-			self.draw_board_foreground(board_layer)
-			screen.blit(board_layer, (0, SQUARE_SIZE))
-			self.draw_outlines(screen)
-			pygame.display.update()
-			currVelocity += gravity
-			yCurrPos += int(currVelocity / FPS)
-			clock.tick(FPS)
-
-		#Draw Menu
-		self.draw_menu(menu_layer)
-		screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
-		self.draw_menu_items(screen)
-
-		self.draw_background(screen)
-		self.draw_chip(screen, xPos, yFinalPos, self.currColor, True)
-		self.draw_board_foreground(board_layer)
-		screen.blit(board_layer, (0, SQUARE_SIZE))
-		pygame.display.update()
-
 	def draw_outlines(self, screen):
 		#Draw outlines
 		pygame.draw.rect(screen, self.gameDividerColor, (WIDTH - MENU_WIDTH - OUTLINE_WIDTH, 0, OUTLINE_WIDTH, HEIGHT))  #Vertical Outline
