@@ -87,8 +87,8 @@ def draw_menu(screen, update_game_state):
 	draw_text_center(screen, WIDTH / 2, SQUARE_SIZE * 4 / 5, "By Rohil Agarwal", LIGHT_GREY, font20)
 
 
-	kinematics = menu_button(WIDTH // 2, 2 * SQUARE_SIZE, "ML Solver")
-	circularMotion = menu_button(WIDTH // 2, 3 * SQUARE_SIZE, "Default Game")
+	kinematics = menu_button(WIDTH // 2, 2 * SQUARE_SIZE, "vs ML Solver")
+	circularMotion = menu_button(WIDTH // 2, 3 * SQUARE_SIZE, "vs Human")
 	aboutMe = menu_button(WIDTH // 2, HEIGHT - SQUARE_SIZE, "About Me")
 
 	#draw button and check if clicked
