@@ -3,10 +3,9 @@ from UIElements.Button import Button
 import numpy as np
 import random
 
-
-def menu_button(centerX, centerY, text):
-	return Button(centerX=centerX, centerY=centerY, width=SQUARE_SIZE * 5 // 2, height=SQUARE_SIZE // 2, font=font30, borderSize=10, text=text)
-
+rojWidth = 300
+roj = pygame.image.load('UIElements/roj.png').convert_alpha()
+scaledRoj = pygame.transform.scale(roj, (rojWidth, rojWidth)).convert_alpha()
 
 def draw_chip(screen, x, y, color, ifOutline):
 	pygame.draw.circle(screen, color, (x, y), RADIUS)
@@ -21,8 +20,7 @@ yFinalPos = 2 * HEIGHT
 currVelocity = initial_velocity
 currColor = random.choice([RED, YELLOW])
 
-
-def draw_menu(screen, update_game_state):
+def draw_about_me(screen, update_game_state):
 	global xCurrPos, yInitPos, yCurrPos, yFinalPos, currVelocity, currColor
 
 	board = np.array(
@@ -67,9 +65,6 @@ def draw_menu(screen, update_game_state):
 	#draw animating chip
 	draw_chip(screen, xCurrPos, yCurrPos, currColor, True)
 
-	screen.blit(board_layer, (-SQUARE_SIZE // 2, SQUARE_SIZE))
-	screen.blit(pygame.transform.flip(board_layer, True, False), (WIDTH - SQUARE_SIZE * 5 // 2, SQUARE_SIZE))
-
 	if yCurrPos > yFinalPos:
 		xCurrPos = random.choice([SQUARE_SIZE * 2, SQUARE_SIZE * 7])
 		yCurrPos = yInitPos
@@ -83,22 +78,18 @@ def draw_menu(screen, update_game_state):
 	pygame.draw.rect(screen, DARK_GREY, (0, 0, WIDTH, SQUARE_SIZE))
 
 	#draw title
-	draw_text_center(screen, WIDTH / 2, SQUARE_SIZE // 3, "Connect 4 Remastered: ML-Powered Solver", LIGHT_GREY, font40)
-	draw_text_center(screen, WIDTH / 2, SQUARE_SIZE * 4 / 5, "By Rohil Agarwal", LIGHT_GREY, font20)
+	draw_text_center(screen, WIDTH / 2, SQUARE_SIZE // 2, "About Me", LIGHT_GREY, font40)
 
+	screen.blit(board_layer, (-SQUARE_SIZE // 2, SQUARE_SIZE))
+	screen.blit(pygame.transform.flip(board_layer, True, False), (WIDTH - SQUARE_SIZE * 5 // 2, SQUARE_SIZE))
 
-	kinematics = menu_button(WIDTH // 2, 2 * SQUARE_SIZE, "ML Solver")
-	circularMotion = menu_button(WIDTH // 2, 3 * SQUARE_SIZE, "Default Game")
-	aboutMe = menu_button(WIDTH // 2, HEIGHT - SQUARE_SIZE, "About Me")
+	screen.blit(scaledRoj, (WIDTH / 2 - rojWidth / 2, SQUARE_SIZE * 4 // 3))
+	draw_text_center(screen, WIDTH / 2, HEIGHT * 2 // 3, "By Rohil Agarwal", WHITE, font30)
+	draw_text_center(screen, WIDTH / 2, HEIGHT * 2 // 3 + SQUARE_SIZE // 2, "I go by roj.", WHITE, font20)
+	draw_text_center(screen, WIDTH / 2, HEIGHT - SQUARE_SIZE * 3 // 2, "Github: https://github.com/rohilvagarwal", WHITE, font15)
+	draw_text_center(screen, WIDTH / 2, HEIGHT - SQUARE_SIZE * 4 // 3, "LinkedIn: https://www.linkedin.com/in/rohil-ag/", WHITE, font15)
 
-	#draw button and check if clicked
-	if kinematics.draw_and_check_click(screen):
-		update_game_state("ML Solver")
+	menuButton = Button(WIDTH // 2, HEIGHT - SQUARE_SIZE // 2, SQUARE_SIZE * 5 // 2, SQUARE_SIZE // 2, font30, SQUARE_SIZE // 10, "Menu")
 
-	if circularMotion.draw_and_check_click(screen):
-		update_game_state("Default Game")
-
-	if aboutMe.draw_and_check_click(screen):
-		update_game_state("About Me")
-
-	pygame.draw.rect(screen, WHITE, (0, SQUARE_SIZE, WIDTH, OUTLINE_WIDTH))  #Horizontal Outline
+	if menuButton.draw_and_check_click(screen):
+		update_game_state("Menu")

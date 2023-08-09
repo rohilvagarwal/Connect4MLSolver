@@ -49,9 +49,9 @@ class Connect4GameLogic:
 		self.currColor = self.playerColorDict[self.currPlayer]
 
 		#fonts
-		self.winFont = pygame.font.SysFont("jost700", 75)
-		self.turnFont = pygame.font.SysFont("jost700", 20)
-		self.menuFont = pygame.font.SysFont("jost700", 30)
+		self.winFont = pygame.font.Font("fonts/Jost-700-Bold.otf", 75)
+		self.turnFont = pygame.font.Font("fonts/Jost-700-Bold.otf", 20)
+		self.menuFont = pygame.font.Font("fonts/Jost-700-Bold.otf", 30)
 
 		#picture imports
 		d4 = pygame.image.load("UIElements/d4.png").convert_alpha()

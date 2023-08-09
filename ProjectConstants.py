@@ -46,12 +46,10 @@ WHITE = pygame.Color("#FFFFFF")
 GREY = pygame.Color("#4c4c4c")
 
 #10, 20, 25, 30, 70
-font10 = pygame.font.SysFont("jost700", 10)
-font20 = pygame.font.SysFont("jost700", 20)
-font25 = pygame.font.SysFont("jost700", 25)
-font30 = pygame.font.SysFont("jost700", 30)
-font40 = pygame.font.SysFont("jost700", 40)
-font70 = pygame.font.SysFont("jost700", 70)
+font15 = pygame.font.Font("fonts/Jost-700-Bold.otf", 15)
+font20 = pygame.font.Font("fonts/Jost-700-Bold.otf", 20)
+font30 = pygame.font.Font("fonts/Jost-700-Bold.otf", 30)
+font40 = pygame.font.Font("fonts/Jost-700-Bold.otf", 40)
 
 
 def draw_text_center(screen, centerX, centerY, text, color, font):

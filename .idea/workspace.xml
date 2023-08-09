@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a649f482-3bb0-42fb-a28b-5974fd8ca95d" name="Changes" comment="condensing code">
-      <change afterPath="$PROJECT_DIR$/ExtraPages/Menu.py" afterDir="false" />
+    <list default="true" id="a649f482-3bb0-42fb-a28b-5974fd8ca95d" name="Changes" comment="creating game menu and adding game state logic">
+      <change afterPath="$PROJECT_DIR$/ExtraPages/AboutMe.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Connect4.py" beforeDir="false" afterPath="$PROJECT_DIR$/Connect4.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Connect4.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Connect4ML.py" beforeDir="false" afterPath="$PROJECT_DIR$/Connect4ML.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExtraPages/Menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/ExtraPages/Menu.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameLogic/Connect4GameLogic.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameLogic/Connect4GameLogic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameLogic/Connect4MLGameLogic.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameLogic/Connect4MLGameLogic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectConstants.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectConstants.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -171,7 +171,14 @@
       <option name="project" value="LOCAL" />
       <updated>1691544503240</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="creating game menu and adding game state logic">
+      <created>1691600507784</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1691600507784</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -190,6 +197,7 @@
     <MESSAGE value="adding requirements.txt" />
     <MESSAGE value="updating .idea folder" />
     <MESSAGE value="condensing code" />
-    <option name="LAST_COMMIT_MESSAGE" value="condensing code" />
+    <MESSAGE value="creating game menu and adding game state logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="creating game menu and adding game state logic" />
   </component>
 </project>
