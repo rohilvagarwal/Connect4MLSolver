@@ -5,9 +5,8 @@ import random
 import math
 
 class Connect4GameLogic:
-	def __init__(self, rowCount, columnCount, player1Name, player2Name, update_game_state, display_update):
+	def __init__(self, rowCount, columnCount, player1Name, player2Name, update_game_state):
 		self.update_game_state = update_game_state
-		self.display_update = display_update
 
 		#design
 		self.bgColor = DARK_GREY
@@ -58,6 +57,15 @@ class Connect4GameLogic:
 		d4 = pygame.image.load("UIElements/d4.png").convert_alpha()
 		self.d4resized = pygame.transform.scale(d4, (LOGO_SIZE, LOGO_SIZE)).convert_alpha()
 
+		#animating chip
+		self.ifAnimating = False
+		self.animatingCol = None
+		self.animatingXPos = None
+		self.animatingYInitPos = int(SQUARE_SIZE / 2)
+		self.animatingYCurrPos = None
+		self.animatingYFinalPos = None
+		self.animatingCurrVelocity = None
+
 	def restart(self):
 		self.gameOver = False
 		self.board.fill(self.noPlayerNum)
@@ -65,6 +73,7 @@ class Connect4GameLogic:
 		self.winnerName = None
 		#self.firstPlayer = random.randint(self.player1Num, self.player2Num)
 		self.recalculate_curr_player()
+		self.ifAnimating = False
 
 	def switch_first_player(self):
 		self.firstPlayer = self.player2Num if self.firstPlayer == self.player1Num else self.player1Num
@@ -183,7 +192,7 @@ class Connect4GameLogic:
 			self.draw_board_foreground(board_layer)
 			screen.blit(board_layer, (0, SQUARE_SIZE))
 			self.draw_outlines(screen)
-			self.display_update()
+			pygame.display.update()
 			currVelocity += gravity
 			yCurrPos += int(currVelocity / FPS)
 			clock.tick(FPS)
@@ -197,7 +206,7 @@ class Connect4GameLogic:
 		self.draw_chip(screen, xPos, yFinalPos, self.currColor, True)
 		self.draw_board_foreground(board_layer)
 		screen.blit(board_layer, (0, SQUARE_SIZE))
-		self.display_update()
+		pygame.display.update()
 
 	def draw_outlines(self, screen):
 		#Draw outlines
@@ -250,36 +259,56 @@ class Connect4GameLogic:
 		board_layer = pygame.Surface((WIDTH - MENU_WIDTH, HEIGHT - SQUARE_SIZE)).convert_alpha()
 		menu_layer = pygame.Surface((MENU_WIDTH, HEIGHT)).convert_alpha()
 
-		#Draw Menu
-		self.draw_menu(menu_layer)
-		screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
-		self.draw_menu_items(screen)
-
-		#Board
 		self.draw_background(screen)
-		self.draw_board_foreground(board_layer)
-		screen.blit(board_layer, (0, SQUARE_SIZE))
 
 		if not self.gameOver:
 			mouseX, mouseY = pygame.mouse.get_pos()
 
-			#Draw hovering chip
-			if 0 < mouseX < WIDTH - MENU_WIDTH:
-				circlePosX = int(math.floor(mouseX / SQUARE_SIZE)) * SQUARE_SIZE + SQUARE_SIZE / 2
-				self.draw_chip(screen, circlePosX, int(SQUARE_SIZE / 2), self.currColor, True)
+			#Draw Menu
+			self.draw_menu(menu_layer)
+			screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
+			self.draw_menu_items(screen)
 
-			#Drop piece if clicked
-			columnDropped = self.check_if_piece_added()
-			if columnDropped is not None:
-				self.animate_drop(screen, columnDropped)
-				self.drop_piece(columnDropped)
+			if self.ifAnimating:
+				self.draw_chip(screen, self.animatingXPos, self.animatingYCurrPos, self.currColor, True)
 
+				self.animatingCurrVelocity += gravity
+				self.animatingYCurrPos += self.animatingCurrVelocity // FPS
+
+				if self.animatingYCurrPos > self.animatingYFinalPos:
+					self.ifAnimating = False
+					self.drop_piece(self.animatingCol)
+
+			else:
+				#Draw hovering chip
+				if 0 < mouseX < WIDTH - MENU_WIDTH:
+					circlePosX = int(math.floor(mouseX / SQUARE_SIZE)) * SQUARE_SIZE + SQUARE_SIZE / 2
+					self.draw_chip(screen, circlePosX, int(SQUARE_SIZE / 2), self.currColor, True)
+
+				#Drop piece if clicked
+				columnDropped = self.check_if_piece_added()
+				if columnDropped is not None:
+					self.ifAnimating = True
+					self.animatingCol = columnDropped
+					self.animatingXPos = int(columnDropped * SQUARE_SIZE + SQUARE_SIZE / 2)
+					self.animatingYInitPos = int(SQUARE_SIZE / 2)
+					self.animatingYCurrPos = self.animatingYInitPos
+					self.animatingYFinalPos = HEIGHT - int(self.get_next_open_row(columnDropped) * SQUARE_SIZE + SQUARE_SIZE / 2)
+					self.animatingCurrVelocity = initial_velocity
+
+			#Board
+			self.draw_board_foreground(board_layer)
+			screen.blit(board_layer, (0, SQUARE_SIZE))
 
 			self.draw_outlines(screen)
 
 			self.check_game_over()
 
 		else:
+			#Board
+			self.draw_board_foreground(board_layer)
+			screen.blit(board_layer, (0, SQUARE_SIZE))
+
 			self.draw_outlines(screen)
 
 			if self.winnerName is None:
@@ -288,6 +317,11 @@ class Connect4GameLogic:
 			else:
 				self.recalculate_curr_player()
 				draw_text_center(screen, (WIDTH - MENU_WIDTH) / 2, SQUARE_SIZE / 2, self.winnerName + " won!", self.currColor, self.winFont)
+
+			#Draw Menu
+			self.draw_menu(menu_layer)
+			screen.blit(menu_layer, (WIDTH - MENU_WIDTH, 0))
+			self.draw_menu_items(screen)
 
 	def print_board(self):
 		print(np.flip(self.board, 0))

@@ -89,7 +89,7 @@ def draw_menu(screen, update_game_state):
 
 	kinematics = menu_button(WIDTH // 2, 2 * SQUARE_SIZE, "vs ML Solver")
 	circularMotion = menu_button(WIDTH // 2, 3 * SQUARE_SIZE, "vs Human")
-	aboutMe = menu_button(WIDTH // 2, HEIGHT - SQUARE_SIZE, "About Me")
+	aboutMe = menu_button(WIDTH // 2, HEIGHT - SQUARE_SIZE // 2, "About Me")
 
 	#draw button and check if clicked
 	if kinematics.draw_and_check_click(screen):
