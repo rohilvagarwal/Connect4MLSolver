@@ -2,7 +2,9 @@ import asyncio
 
 import sys
 from ProjectConstants import *
+from platform import window
 
+window.python.config.user_canvas = 0
 screen = pygame.display.set_mode(SIZE)
 pygame.display.set_caption("Connect 4: ML Solver")
 
