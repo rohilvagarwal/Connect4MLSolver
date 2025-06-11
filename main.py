@@ -1,3 +1,13 @@
+# /// script
+# dependencies = [
+#  "pytmx",
+#  "pygame-ce",
+#  "pyscroll",
+#  "numpy",
+#  "math"
+# ]
+# ///
+
 import asyncio
 
 import sys
