@@ -13,6 +13,17 @@ jobs:
         run: |
           python -m pip install pygbag
           python -m pygbag --ume_block=0 --build $GITHUB_WORKSPACE/main.py
+      - name: "Add Google Analytics"
+        run: |
+          sed -i '/<head>/a \
+          <!-- Google tag (gtag.js) -->\
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-32LD3G4GTT"></script>\
+          <script>\
+            window.dataLayer = window.dataLayer || [];\
+            function gtag(){dataLayer.push(arguments);}\
+            gtag("js", new Date());\
+            gtag("config", "G-32LD3G4GTT");\
+          </script>' $GITHUB_WORKSPACE/build/web/index.html
       - name: "Upload to GitHub pages branch gh-pages"
         uses: JamesIves/github-pages-deploy-action@4.1.7
         with:

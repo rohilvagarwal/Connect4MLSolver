@@ -27,7 +27,7 @@ def update_game_state(new_state):
 	global gameState
 	gameState = new_state
 
-mlGame = Connect4MLGameLogic(ROW_COUNT, COLUMN_COUNT, "You", "The ML", update_game_state)
+mlGame = Connect4MLGameLogic(ROW_COUNT, COLUMN_COUNT, "You", "FourSight", update_game_state)
 defaultGame = Connect4GameLogic(ROW_COUNT, COLUMN_COUNT, "Red", "Yellow", update_game_state)
 
 gameState = "Menu"  #ML Solver, Default Game

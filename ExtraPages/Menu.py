@@ -83,11 +83,11 @@ def draw_menu(screen, update_game_state):
 	pygame.draw.rect(screen, DARK_GREY, (0, 0, WIDTH, SQUARE_SIZE))
 
 	#draw title
-	draw_text_center(screen, WIDTH / 2, SQUARE_SIZE // 3, "Connect 4 Remastered: ML-Powered Solver", LIGHT_GREY, font40)
+	draw_text_center(screen, WIDTH / 2, SQUARE_SIZE // 3, "FourSight: Connect 4 ML-Powered Solver", LIGHT_GREY, font40)
 	draw_text_center(screen, WIDTH / 2, SQUARE_SIZE * 4 / 5, "By Rohil Agarwal", LIGHT_GREY, font20)
 
 
-	kinematics = menu_button(WIDTH // 2, 2 * SQUARE_SIZE, "vs ML Solver")
+	kinematics = menu_button(WIDTH // 2, 2 * SQUARE_SIZE, "vs FourSight")
 	circularMotion = menu_button(WIDTH // 2, 3 * SQUARE_SIZE, "vs Human")
 	aboutMe = menu_button(WIDTH // 2, HEIGHT - SQUARE_SIZE // 2, "About Me")
 
