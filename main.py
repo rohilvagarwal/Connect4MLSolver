@@ -1,9 +1,6 @@
 # /// script
 # dependencies = [
-#  "pytmx",
 #  "pygame-ce",
-#  "pyscroll",
-#  "numpy",
 #  "math"
 # ]
 # ///

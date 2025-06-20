@@ -1,6 +1,5 @@
 from ProjectConstants import *
 from GameLogic.Connect4GameLogic import Connect4GameLogic
-import numpy as np
 import math
 
 def ml_drop_piece(board, row, col, player):
@@ -23,7 +22,7 @@ def ml_get_valid_columns(board, noPlayerNum):
 def ml_get_next_open_row(board, col, noPlayerNum):
 	for r in range(ROW_COUNT):
 		position = board[r][col]
-		if np.any(position == noPlayerNum):
+		if position == noPlayerNum:
 			return r
 
 def ml_winning_move(board, player):
@@ -112,7 +111,7 @@ def pick_best_move(board, player, noPlayerNum, mlNum, humanNum):
 	best_col = None
 	for col in valid_locations:
 		row = ml_get_next_open_row(board, col, noPlayerNum)
-		temp_board = board.copy()
+		temp_board = [row[:] for row in board]
 		ml_drop_piece(temp_board, row, col, player)
 		score = ml_score_position(temp_board, player, mlNum, humanNum)
 		if score > best_score:
@@ -141,7 +140,7 @@ def ml_minimax(board, depth, alpha, beta, maximizingPlayer, noPlayerNum, mlNum, 
 		column = None
 		for col in valid_locations:
 			row = ml_get_next_open_row(board, col, noPlayerNum)
-			b_copy = board.copy()
+			b_copy = [row[:] for row in board]
 			ml_drop_piece(b_copy, row, col, mlNum)
 			new_score = ml_minimax(b_copy, depth - 1, alpha, beta, False, noPlayerNum, mlNum, humanNum)[1]
 			if new_score > value:
@@ -157,7 +156,7 @@ def ml_minimax(board, depth, alpha, beta, maximizingPlayer, noPlayerNum, mlNum, 
 		column = None
 		for col in valid_locations:
 			row = ml_get_next_open_row(board, col, noPlayerNum)
-			b_copy = board.copy()
+			b_copy = [row[:] for row in board]
 			ml_drop_piece(b_copy, row, col, humanNum)
 			new_score = ml_minimax(b_copy, depth - 1, alpha, beta, True, noPlayerNum, mlNum, humanNum)[1]
 			if new_score < value:

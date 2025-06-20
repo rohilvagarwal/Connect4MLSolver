@@ -1,6 +1,5 @@
 from ProjectConstants import *
 from UIElements.Button import Button
-import numpy as np
 import random
 
 rojWidth = 300
@@ -23,14 +22,12 @@ currColor = random.choice([RED, YELLOW])
 def draw_about_me(screen, update_game_state):
 	global xCurrPos, yInitPos, yCurrPos, yFinalPos, currVelocity, currColor
 
-	board = np.array(
-		[[1, 1, 0],
+	board = [[1, 1, 0],
 		 [1, 2, 0],
 		 [2, 1, 0],
 		 [2, 2, 0],
 		 [1, 2, 0],
 		 [0, 1, 0]]
-	)
 	player1Num = 1
 	player2Num = 2
 

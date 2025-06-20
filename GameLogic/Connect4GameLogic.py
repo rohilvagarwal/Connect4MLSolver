@@ -1,6 +1,5 @@
 from ProjectConstants import *
 from UIElements.Button import Button
-import numpy as np
 import random
 import math
 
@@ -41,7 +40,7 @@ class Connect4GameLogic:
 		}
 
 		self.gameOver = False
-		self.board = np.zeros((rowCount, columnCount))
+		self.board = [[0 for _ in range(columnCount)] for _ in range(rowCount)]
 		self.turn = 1
 		self.winnerName = None
 		self.firstPlayer = self.player1Num
@@ -68,7 +67,9 @@ class Connect4GameLogic:
 
 	def restart(self):
 		self.gameOver = False
-		self.board.fill(self.noPlayerNum)
+		for r in range(self.rowCount):
+			for c in range(self.columnCount):
+				self.board[r][c] = self.noPlayerNum
 		self.turn = 1
 		self.winnerName = None
 		#self.firstPlayer = random.randint(self.player1Num, self.player2Num)
@@ -93,7 +94,7 @@ class Connect4GameLogic:
 	def get_next_open_row(self, col):
 		for r in range(self.rowCount):
 			position = self.board[r][col]
-			if np.any(position == self.noPlayerNum):
+			if position == self.noPlayerNum:
 				return r
 
 	def drop_piece(self, col):
@@ -135,7 +136,7 @@ class Connect4GameLogic:
 			self.gameOver = True
 			self.winnerName = self.player2Name
 			self.turn -= 1
-		elif not np.any(self.board == 0):
+		elif not any(0 in row for row in self.board):
 			self.gameOver = True
 			self.turn -= 1
 
@@ -277,4 +278,4 @@ class Connect4GameLogic:
 		self.draw_outlines(screen)
 
 	def print_board(self):
-		print(np.flip(self.board, 0))
+		print(self.board[::-1])
